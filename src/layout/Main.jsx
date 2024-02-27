@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MoviesList from "../components/MoviesList";
 import Preloader from "../components/Preloader";
 import Search from "../components/Search";
@@ -7,7 +7,7 @@ import { getMovies } from "../api/api";
 export default function Main() {
   const [isLoading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
-  
+
   const searchMovies = (searchStr, type) => {
     setLoading(true);
     getMovies(searchStr, type)
@@ -21,6 +21,7 @@ export default function Main() {
       })
       .catch((err) => {
         setLoading(false);
+        setMovies([])
         console.log(err);
       });
   };

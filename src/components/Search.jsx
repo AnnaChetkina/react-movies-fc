@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RadioBtn from "./RadioBtn";
 import { RadioButtonsData } from "../dict";
 
 export default function Search({ handleSearch }) {
   const [searchStr, setSearchStr] = useState("");
   const [type, setType] = useState("all");
- 
+
+  useEffect(() => {
+    let timeout = null;
+    if (searchStr) {
+       timeout = setTimeout(() => {
+        console.log(timeout);
+        handleSearch(searchStr, type);
+      }, 1000);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [searchStr]);
+
   const handleChange = (e) => {
     setSearchStr(e.target.value);
   };
@@ -15,19 +28,12 @@ export default function Search({ handleSearch }) {
     handleSearch(searchStr, typeValue);
   };
 
-  const handleKey = (e) => {
-    if (e.key === "Enter") {
-      handleSearch(searchStr, type);
-    }
-  };
-
   return (
     <div className="input-field">
       <input
         value={searchStr}
         name="searchStr"
         onChange={handleChange}
-        onKeyDown={handleKey}
         className="validate"
         placeholder="search"
         type="text"
@@ -43,13 +49,6 @@ export default function Search({ handleSearch }) {
           />
         ))}
       </div>
-      <button
-        onClick={() => handleSearch(searchStr, type)}
-        className="btn search-btn"
-        disabled={!searchStr}
-      >
-        Search
-      </button>
     </div>
   );
 }
